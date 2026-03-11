@@ -8,7 +8,7 @@
   (function() {
     var el = document.getElementById('email-link');
     if (el) {
-      el.href = 'mail' + 'to:' + 'hello' + '@' + 'roycetruss.com';
+      el.href = 'mail' + 'to:' + 'connect' + '@' + 'roycetruss.com';
     }
   })();
 
