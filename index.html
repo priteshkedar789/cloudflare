@@ -601,16 +601,38 @@
     #stack { background: var(--cream); padding: 4rem 5%; }
     .stack-inner { max-width: 100%; }
     .stack-header { margin-bottom: 2.5rem; }
-    .stack-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+    .stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .stack-canvas { position: relative; padding: 2.5rem 0; }
     .stack-item {
       background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 10px; padding: 1.2rem 1rem;
-      text-align: center; transition: border-color 0.2s, transform 0.2s;
+      border-radius: 10px; padding: 1.4rem 1.2rem;
+      text-align: left; transition: border-color 0.2s, transform 0.2s;
     }
     .stack-item:hover { border-color: var(--amber); transform: translateY(-2px); }
-    .stack-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
-    .stack-name { font-size: 0.8rem; font-weight: 600; color: var(--navy); }
-    .stack-use { font-size: 0.7rem; color: var(--text-light); margin-top: 0.2rem; line-height: 1.4; }
+    .stack-icon { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 0.75rem; min-height: 36px; }
+    .stack-icon img { width: 36px; height: 36px; object-fit: contain; display: block; }
+    .stack-icon svg { width: 36px; height: 36px; display: block; }
+    .stack-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 0.2rem; }
+    .stack-use { font-size: 0.75rem; color: var(--text-light); margin-top: 0.2rem; line-height: 1.4; }
+    .stack-context {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--amber-text); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-top: 0.6rem;
+    }
+    .stack-subtitle { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text-light); margin-top: 0.6rem; }
+    .stack-annotation {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--amber-text);
+      opacity: 0.55;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
 
     /* ─── FAQ ─── */
     #faq { background: var(--warm-white); }
@@ -774,6 +796,8 @@
       .faq-grid { grid-template-columns: 1fr; }
       .form-grid { grid-template-columns: 1fr; }
       .stack-grid { grid-template-columns: repeat(3, 1fr); }
+      .stack-annotation { display: none; }
+      .stack-canvas { position: static; padding: 0; }
     }
     @media (max-width: 480px) {
       .domains-grid { grid-template-columns: 1fr; }
@@ -1253,20 +1277,108 @@
     <div class="stack-header reveal">
       <div class="section-label">Technology Capabilities</div>
       <h2 class="section-title" id="stack-heading" style="margin-bottom:0.5rem;">Built with the right tools<br/>for each domain.</h2>
+      <p class="stack-subtitle">Every tool chosen for a reason. No bloat, no defaults.</p>
     </div>
-    <div class="stack-grid">
-      <div class="stack-item reveal reveal-delay-1"><div class="stack-icon">⚛️</div><div class="stack-name">React / Next.js</div><div class="stack-use">Web &amp; mobile interfaces</div></div>
-      <div class="stack-item reveal reveal-delay-2"><div class="stack-icon">🟢</div><div class="stack-name">Node.js</div><div class="stack-use">Backend APIs &amp; services</div></div>
-      <div class="stack-item reveal reveal-delay-3"><div class="stack-icon">🔗</div><div class="stack-name">Solidity / Web3</div><div class="stack-use">Smart contracts &amp; DApps</div></div>
-      <div class="stack-item reveal reveal-delay-4"><div class="stack-icon">🔄</div><div class="stack-name">n8n</div><div class="stack-use">Workflow automation</div></div>
-      <div class="stack-item reveal reveal-delay-1"><div class="stack-icon">🤖</div><div class="stack-name">OpenAI / LLMs</div><div class="stack-use">AI agents &amp; copilots</div></div>
-      <div class="stack-item reveal reveal-delay-2"><div class="stack-icon">📡</div><div class="stack-name">MQTT / Edge</div><div class="stack-use">IoT sensor networks</div></div>
-      <div class="stack-item reveal reveal-delay-3"><div class="stack-icon">☁️</div><div class="stack-name">AWS / Azure</div><div class="stack-use">Cloud infrastructure</div></div>
-      <div class="stack-item reveal reveal-delay-4"><div class="stack-icon">🐍</div><div class="stack-name">Python</div><div class="stack-use">AI/ML &amp; data pipelines</div></div>
-      <div class="stack-item reveal reveal-delay-1"><div class="stack-icon">🗄️</div><div class="stack-name">PostgreSQL / MongoDB</div><div class="stack-use">Databases &amp; storage</div></div>
-      <div class="stack-item reveal reveal-delay-2"><div class="stack-icon">📱</div><div class="stack-name">React Native</div><div class="stack-use">Cross-platform mobile</div></div>
-      <div class="stack-item reveal reveal-delay-3"><div class="stack-icon">⚙️</div><div class="stack-name">Docker / CI/CD</div><div class="stack-use">DevOps &amp; deployment</div></div>
-      <div class="stack-item reveal reveal-delay-4"><div class="stack-icon">🔐</div><div class="stack-name">HIPAA / HL7</div><div class="stack-use">Healthcare compliance</div></div>
+    <div class="stack-canvas">
+
+      <!-- Annotation TL -->
+      <div class="stack-annotation" style="top:0;left:0;">
+        Replaces shelf products
+        <svg width="38" height="28" viewBox="0 0 38 28" fill="none" aria-hidden="true"><path d="M3 3 C10 3 28 9 35 25" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/><path d="M29 21 L35 25 L31 19" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/></svg>
+      </div>
+
+      <!-- Annotation TR -->
+      <div class="stack-annotation" style="top:0;right:0;">
+        <svg width="38" height="28" viewBox="0 0 38 28" fill="none" aria-hidden="true"><path d="M35 3 C28 3 10 9 3 25" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/><path d="M9 21 L3 25 L7 19" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/></svg>
+        Deployed in weeks, not quarters
+      </div>
+
+      <!-- Annotation BL -->
+      <div class="stack-annotation" style="bottom:0;left:0;">
+        Runs in your infrastructure
+        <svg width="38" height="28" viewBox="0 0 38 28" fill="none" aria-hidden="true"><path d="M3 25 C10 25 28 19 35 3" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/><path d="M29 7 L35 3 L31 9" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/></svg>
+      </div>
+
+      <!-- Annotation BR -->
+      <div class="stack-annotation" style="bottom:0;right:0;">
+        <svg width="38" height="28" viewBox="0 0 38 28" fill="none" aria-hidden="true"><path d="M35 25 C28 25 10 19 3 3" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/><path d="M9 7 L3 3 L7 9" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/></svg>
+        No vendor lock-in
+      </div>
+
+      <div class="stack-grid">
+        <div class="stack-item reveal reveal-delay-1">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" loading="lazy"></div>
+          <div class="stack-name">React / Next.js</div>
+          <div class="stack-use">Web &amp; mobile interfaces</div>
+          <div class="stack-context">Healthcare · Manufacturing</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-2">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="Node.js" loading="lazy"></div>
+          <div class="stack-name">Node.js</div>
+          <div class="stack-use">Backend APIs &amp; services</div>
+          <div class="stack-context">All Domains</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-3">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/ethereum/3C3C3D" alt="Ethereum / Web3" loading="lazy"></div>
+          <div class="stack-name">Solidity / Web3</div>
+          <div class="stack-use">Smart contracts &amp; DApps</div>
+          <div class="stack-context">Blockchain</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-4">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/n8n/EA4B71" alt="n8n" loading="lazy"></div>
+          <div class="stack-name">n8n</div>
+          <div class="stack-use">Workflow automation</div>
+          <div class="stack-context">Automation</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-1">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/openai/412991" alt="OpenAI" loading="lazy"></div>
+          <div class="stack-name">OpenAI / LLMs</div>
+          <div class="stack-use">AI agents &amp; copilots</div>
+          <div class="stack-context">AI Agents</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-2">
+          <div class="stack-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c9841a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-label="MQTT / Edge"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="#c9841a"/></svg></div>
+          <div class="stack-name">MQTT / Edge</div>
+          <div class="stack-use">IoT sensor networks</div>
+          <div class="stack-context">IoT</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-3">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/amazonaws/FF9900" alt="AWS" loading="lazy"></div>
+          <div class="stack-name">AWS / Azure</div>
+          <div class="stack-use">Cloud infrastructure</div>
+          <div class="stack-context">All Domains</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-4">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" loading="lazy"></div>
+          <div class="stack-name">Python</div>
+          <div class="stack-use">AI/ML &amp; data pipelines</div>
+          <div class="stack-context">AI · Data</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-1">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="PostgreSQL" loading="lazy"></div>
+          <div class="stack-name">PostgreSQL / MongoDB</div>
+          <div class="stack-use">Databases &amp; storage</div>
+          <div class="stack-context">All Domains</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-2">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React Native" loading="lazy"></div>
+          <div class="stack-name">React Native</div>
+          <div class="stack-use">Cross-platform mobile</div>
+          <div class="stack-context">Healthcare · Field Ops</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-3">
+          <div class="stack-icon"><img src="https://cdn.simpleicons.org/docker/2496ED" alt="Docker" loading="lazy"></div>
+          <div class="stack-name">Docker / CI/CD</div>
+          <div class="stack-use">DevOps &amp; deployment</div>
+          <div class="stack-context">All Domains</div>
+        </div>
+        <div class="stack-item reveal reveal-delay-4">
+          <div class="stack-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c9841a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-label="HIPAA / HL7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+          <div class="stack-name">HIPAA / HL7</div>
+          <div class="stack-use">Healthcare compliance</div>
+          <div class="stack-context">Healthcare Compliance</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
