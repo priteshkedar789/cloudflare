@@ -86,7 +86,7 @@ window.addEventListener('resize', function () {
   client source. Move to a Cloudflare Worker env variable and proxy
   submissions server-side before production deployment.
 */
-var FORM_ENDPOINT = 'https://formspree.io/f/%%FORMSPREE_FORM_ID%%';
+var FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyy7qgNkTG4pwarvrcnzJznpypJDfaP5QtNeW04kEbNCRH99VF06EfS7AISWFRR-qSijw/exec';
 var EMAIL_RE      = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /*
