@@ -80,13 +80,8 @@ window.addEventListener('resize', function () {
   }
 });
 
-/* ── Contact form → Formspree ───────────────────────────────── */
-/*
-  NOTE [SEC/CRITICAL — DEFERRED]: FORMSPREE_FORM_ID is still exposed in
-  client source. Move to a Cloudflare Worker env variable and proxy
-  submissions server-side before production deployment.
-*/
-var FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyy7qgNkTG4pwarvrcnzJznpypJDfaP5QtNeW04kEbNCRH99VF06EfS7AISWFRR-qSijw/exec';
+/* ── Contact form → Google Sheets via Apps Script ───────────── */
+var FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwEt7DglGeDUwd9HaeGGNjeAP5baiLVJvdBLrKqcYry9htz6d2FGkDXOczx35un1qWhmg/exec';
 var EMAIL_RE      = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /*
@@ -116,8 +111,7 @@ function showFieldError(inputId, errId, msg) {
 
 /*
   FIX [SEC/MAJOR]: Basic client-side sanitization strips HTML tags from
-  user input before submission (defense-in-depth; Formspree sanitises
-  server-side as well).
+  user input before submission.
 */
 function sanitize(str) {
   return str.replace(/<[^>]*>/g, '');
@@ -148,22 +142,24 @@ async function submitForm() {
   btn.disabled = true;
 
   try {
-    var res = await fetch(FORM_ENDPOINT, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        name: name, org: org, type: type,
-        email: email, message: msg,
-        _gotcha: ''   /* Security: honeypot always empty on legitimate submissions */
-      })
+    var formData = new FormData();
+    formData.append('name',    name);
+    formData.append('org',     org);
+    formData.append('type',    type);
+    formData.append('email',   email);
+    formData.append('message', msg);
+
+    await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      mode:   'no-cors',  /* Skips CORS preflight — Apps Script limitation */
+      body:   formData
     });
 
-    if (res.ok) {
-      document.getElementById('contactFormWrap').style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
-    } else {
-      document.getElementById('formError').style.display = 'block';
-    }
+    /* no-cors returns opaque response (status 0) — reaching here means
+       the request was dispatched successfully; treat as success */
+    document.getElementById('contactFormWrap').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+
   } catch (err) {
     document.getElementById('formError').style.display = 'block';
   } finally {
