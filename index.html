@@ -1,4 +1,54 @@
 <!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════╗
+  ║  PLACEHOLDER MANIFEST — replace before any deployment                   ║
+  ║                                                                          ║
+  ║  %%FORMSPREE_FORM_ID%%  — Formspree form endpoint ID                    ║
+  ║                           Create at formspree.io → copy the 8-char ID   ║
+  ║                           e.g. "xyzabcde"                               ║
+  ║                                                                          ║
+  ║  %%OG_IMAGE_URL%%       — Absolute URL to OG / Twitter social image     ║
+  ║                           e.g. https://roycetruss.com/static/images/    ║
+  ║                                og-image.jpg  (1200×630 px)              ║
+  ║                                                                          ║
+  ╠══════════════════════════════════════════════════════════════════════════╣
+  ║  DEFERRED — require server-side, build-tool, or new-content changes     ║
+  ║                                                                          ║
+  ║  SEC/CRITICAL  Move CSP to HTTP header via Cloudflare Worker            ║
+  ║                _headers file or Worker middleware — meta CSP cannot     ║
+  ║                enforce frame-ancestors (clickjacking) or report-uri.    ║
+  ║                                                                          ║
+  ║  SEC/CRITICAL  Proxy Formspree through a Cloudflare Worker env-var      ║
+  ║                so FORMSPREE_FORM_ID never appears in client source.     ║
+  ║                                                                          ║
+  ║  SEC/CRITICAL  wrangler.jsonc "assets.directory" must be changed from   ║
+  ║                "." to a dedicated sub-directory (e.g. "./public") to    ║
+  ║                prevent repository root files from being publicly         ║
+  ║                downloadable. Requires a directory restructure.          ║
+  ║                                                                          ║
+  ║  SEC/MAJOR     style-src 'unsafe-inline' removal — requires migrating   ║
+  ║                all remaining inline styles to classes + nonce injection  ║
+  ║                via Worker.                                               ║
+  ║                                                                          ║
+  ║  PERF/MAJOR    static/images/react-native.svg is missing from the       ║
+  ║                repository — stack section fires a 404. Add the asset.   ║
+  ║                                                                          ║
+  ║  PERF/MINOR    Extract noise-texture SVG to static asset for caching.   ║
+  ║                                                                          ║
+  ║  PERF/MINOR    Consolidate 12 stack-item SVGs into a sprite.            ║
+  ║                                                                          ║
+  ║  RESP/MAJOR    Mobile-only condensed trust bar (new content).           ║
+  ║                                                                          ║
+  ║  RESP/MAJOR    320 px breakpoint — confirm overflow on device first.    ║
+  ║                                                                          ║
+  ║  RESP/MINOR    Stack annotations at 769–1024 px — needs device test.    ║
+  ║                                                                          ║
+  ║  UX/MINOR      FAQ accordion via <details>/<summary> (structural).      ║
+  ║                                                                          ║
+  ║  UX/MINOR      Portfolio card cursor:pointer false affordance —         ║
+  ║                requires case-study destination pages.                   ║
+  ╚══════════════════════════════════════════════════════════════════════════╝
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -26,11 +76,9 @@
              img-src 'self' data:;" />
 
   <!-- FIX [SEO/MAJOR]: Brand name moved to front for stronger SERP anchoring -->
-  <title>RoyceTruss | Custom Healthcare &amp; Industrial Solutions</title>
+  <title>RoyceTruss | Custom Healthcare &amp; Industrial Software</title>
 
   <meta name="description" content="RoyceTruss builds custom software, IoT systems, blockchain solutions, and AI automation for hospitals, manufacturers, and industrial businesses worldwide." />
-
-  <!-- FIX [SEO/MINOR]: Removed meta keywords (no SEO value since 2009, adds page weight) -->
 
   <!-- FIX [SEO/SUGGESTION]: Explicit robots directive -->
   <meta name="robots" content="index, follow" />
@@ -61,6 +109,11 @@
     FIX [SEO/CRITICAL]: areaServed was invalid JSON (string + comma-separated
     literals). Changed to a proper JSON array.
     FIX [SEO/MAJOR]: ProfessionalService node — added @id, address, and email.
+    FIX [SEO/MAJOR — Priority 3]: Replaced &amp; HTML entities with bare &
+    inside this <script> block. Script content is raw text; HTML parsers do
+    not decode character references inside <script type="application/ld+json">,
+    so JSON parsers received the four-character literal "&amp;" causing
+    Google Rich Results validator to reject the structured data.
   -->
   <script type="application/ld+json">
   {
@@ -86,7 +139,7 @@
       {
         "@type": "ProfessionalService",
         "@id": "https://roycetruss.com/#service",
-        "name": "RoyceTruss Custom Software &amp; Digital Transformation",
+        "name": "RoyceTruss Custom Software & Digital Transformation",
         "url": "https://roycetruss.com",
         "email": "hello@roycetruss.com",
         "address": {
@@ -115,16 +168,24 @@
   </script>
 
   <!--
-    FIX [PERF/CRITICAL]: Added preload for Google Fonts and local stylesheet.
-    FIX [PERF/MAJOR]: Added preload hints for main.css and main.js.
-    The preconnect to fonts.gstatic.com stays in place.
+    FIX [PERF/CRITICAL]: Preload hints for local stylesheet and script.
+    FIX [PERF/MAJOR — Priority 5]: Google Fonts converted from render-blocking
+    <link rel="stylesheet"> to the non-blocking preload/onload pattern.
+    The browser fetches the font CSS asynchronously; the noscript fallback
+    covers environments with JS disabled. The onload inline handler is
+    permitted by the existing 'unsafe-inline' script-src in the CSP above.
   -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="static/css/main.css" />
   <link rel="preload" as="script" href="static/js/main.js" />
   <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" />
+  </noscript>
 
   <link rel="stylesheet" href="static/css/main.css" />
 </head>
