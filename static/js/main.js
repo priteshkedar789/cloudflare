@@ -1,135 +1,201 @@
-// Security + Responsiveness: mark JS as available so CSS can scope nav hiding
-  document.documentElement.classList.add('js');
+/*
+FIX [CODE/MAJOR]: Entire script wrapped in IIFE to prevent all variables
+leaking to the global window scope.
+classList.add('js') has been moved to an inline <script> in <head>.
+*/
+(function () {
+'use strict';
 
-  // Code quality: copyright year
-  document.getElementById('copy-year').textContent = new Date().getFullYear();
+/* ── Copyright year ─────────────────────────────────────────── */
+document.getElementById('copy-year').textContent = new Date().getFullYear();
 
-  // Security: construct email href at runtime so no address appears in static HTML
-  (function() {
-    var el = document.getElementById('email-link');
-    if (el) {
-      el.href = 'mail' + 'to:' + 'connect' + '@' + 'roycetruss.com';
-    }
-  })();
-
-  // Scroll reveal — IntersectionObserver
-  var reveals = document.querySelectorAll('.reveal');
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        // Performance: unobserve once visible to prevent observer staying active
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(function(el) { observer.observe(el); });
-
-  // Nav scroll shadow + sticky CTA — passive listener for scroll performance
-  var stickyCta = document.getElementById('sticky-cta');
-  var stickyBtn = stickyCta.querySelector('.sticky-btn');
-  window.addEventListener('scroll', function() {
-    document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
-    // UX: sticky CTA trigger changed from 0.4 to 0.65 (after user has seen portfolio)
-    var pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-    var shouldShow = pct > 0.65;
-    stickyCta.classList.toggle('visible', shouldShow);
-    stickyCta.setAttribute('aria-hidden', String(!shouldShow));
-    // Accessibility: tabindex toggled with visibility
-    stickyBtn.setAttribute('tabindex', shouldShow ? '0' : '-1');
-  }, { passive: true });
-
-  // Mobile menu — Security: was inline onclick, now addEventListener
-  // Code quality: uses .nav-open CSS class instead of inline style mutation
-  var hamburgerBtn = document.getElementById('hamburgerBtn');
-  var navLinks = document.getElementById('navLinks');
-
-  function toggleMenu() {
-    var isOpen = navLinks.classList.contains('nav-open');
-    navLinks.classList.toggle('nav-open', !isOpen);
-    hamburgerBtn.setAttribute('aria-expanded', String(!isOpen));
+/* ── Email link ─────────────────────────────────────────────── */
+/*
+  FIX [SEC/MAJOR]: JS is now sole source of the email href AND textContent.
+  The CF-obfuscated span was removed from HTML.
+*/
+(function () {
+  var el = document.getElementById('email-link');
+  if (el) {
+    var addr = 'hello' + '@' + 'roycetruss.com';
+    el.href = 'mailto:' + addr;
+    el.textContent = addr;
   }
+}());
 
-  hamburgerBtn.addEventListener('click', toggleMenu);
-
-  // Code quality: reset mobile menu state on resize to desktop
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 768) {
-      navLinks.classList.remove('nav-open');
-      hamburgerBtn.setAttribute('aria-expanded', 'false');
+/* ── Scroll reveal — IntersectionObserver ───────────────────── */
+var reveals = document.querySelectorAll('.reveal');
+var revealObserver = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      /* Performance: unobserve once visible */
+      revealObserver.unobserve(e.target);
     }
   });
+}, { threshold: 0.1 });
+reveals.forEach(function (el) { revealObserver.observe(el); });
 
-  // ─── CONTACT FORM → Formspree ───
-  // Replace %%FORMSPREE_FORM_ID%% with your real form ID before deploying.
-  var FORM_ENDPOINT = 'https://formspree.io/f/%%FORMSPREE_FORM_ID%%';
+/* ── Nav scroll shadow + sticky CTA ────────────────────────── */
+var stickyCta  = document.getElementById('sticky-cta');
+var stickyBtn  = stickyCta.querySelector('.sticky-btn');
+var mainNav    = document.getElementById('mainNav');
 
-  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/*
+  FIX [A11y/CRITICAL]: aria-hidden initialised via JS (not static HTML) so
+  AT state is always JS-controlled and never parser-dependent.
+*/
+stickyCta.setAttribute('aria-hidden', 'true');
 
-  function clearFormErrors() {
-    document.querySelectorAll('.field-error').forEach(function(el) {
-      el.classList.remove('visible');
-      el.textContent = '';
-    });
-    document.querySelectorAll('#contactFormWrap input, #contactFormWrap select, #contactFormWrap textarea').forEach(function(el) {
-      el.classList.remove('invalid');
-    });
+window.addEventListener('scroll', function () {
+  mainNav.classList.toggle('scrolled', window.scrollY > 40);
+
+  /*
+    FIX [UX/MAJOR]: Threshold lowered from 0.65 to 0.35 so the persistent
+    CTA becomes visible after the About section, not the Portfolio section.
+  */
+  var pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  var shouldShow = pct > 0.35;
+  stickyCta.classList.toggle('visible', shouldShow);
+  stickyCta.setAttribute('aria-hidden', String(!shouldShow));
+  stickyBtn.setAttribute('tabindex', shouldShow ? '0' : '-1');
+}, { passive: true });
+
+/* ── Mobile menu ────────────────────────────────────────────── */
+var hamburgerBtn = document.getElementById('hamburgerBtn');
+var navLinks     = document.getElementById('navLinks');
+
+function toggleMenu() {
+  var isOpen = navLinks.classList.contains('nav-open');
+  navLinks.classList.toggle('nav-open', !isOpen);
+  hamburgerBtn.setAttribute('aria-expanded', String(!isOpen));
+}
+
+hamburgerBtn.addEventListener('click', toggleMenu);
+
+window.addEventListener('resize', function () {
+  if (window.innerWidth > 768) {
+    navLinks.classList.remove('nav-open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
   }
+});
 
-  function showFieldError(inputId, errId, msg) {
-    var input = document.getElementById(inputId);
-    var err = document.getElementById(errId);
-    if (input) input.classList.add('invalid');
-    if (err) { err.textContent = msg; err.classList.add('visible'); }
+/* ── Contact form → Formspree ───────────────────────────────── */
+/*
+  NOTE [SEC/CRITICAL — DEFERRED]: FORMSPREE_FORM_ID is still exposed in
+  client source. Move to a Cloudflare Worker env variable and proxy
+  submissions server-side before production deployment.
+*/
+var FORM_ENDPOINT = 'https://formspree.io/f/%%FORMSPREE_FORM_ID%%';
+var EMAIL_RE      = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/*
+  FIX [CODE/MINOR]: Field NodeList cached once at initialisation rather
+  than being recalculated on every form submission.
+*/
+var formFields = document.querySelectorAll(
+  '#contactFormWrap input, #contactFormWrap select, #contactFormWrap textarea'
+);
+
+function clearFormErrors() {
+  document.querySelectorAll('.field-error').forEach(function (el) {
+    el.classList.remove('visible');
+    el.textContent = '';
+  });
+  formFields.forEach(function (el) {
+    el.classList.remove('invalid');
+  });
+}
+
+function showFieldError(inputId, errId, msg) {
+  var input = document.getElementById(inputId);
+  var err   = document.getElementById(errId);
+  if (input) { input.classList.add('invalid'); }
+  if (err)   { err.textContent = msg; err.classList.add('visible'); }
+}
+
+/*
+  FIX [SEC/MAJOR]: Basic client-side sanitization strips HTML tags from
+  user input before submission (defense-in-depth; Formspree sanitises
+  server-side as well).
+*/
+function sanitize(str) {
+  return str.replace(/<[^>]*>/g, '');
+}
+
+async function submitForm() {
+  clearFormErrors();
+
+  var name  = document.getElementById('f-name').value.trim();
+  var org   = document.getElementById('f-org').value.trim();
+  var type  = document.getElementById('f-type').value;
+  var email = document.getElementById('f-email').value.trim();
+  var msg   = sanitize(document.getElementById('f-msg').value.trim());
+
+  var valid = true;
+  if (!name) {
+    showFieldError('f-name', 'err-name', 'Please enter your name.');
+    valid = false;
   }
+  if (!email || !EMAIL_RE.test(email)) {
+    showFieldError('f-email', 'err-email', 'Please enter a valid email address.');
+    valid = false;
+  }
+  if (!valid) { return; }
 
-  // Security: was inline onclick; now addEventListener
-  var submitBtn = document.getElementById('submitBtn');
-  submitBtn.addEventListener('click', submitForm);
+  var btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
 
-  async function submitForm() {
-    clearFormErrors();
+  try {
+    var res = await fetch(FORM_ENDPOINT, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        name: name, org: org, type: type,
+        email: email, message: msg,
+        _gotcha: ''   /* Security: honeypot always empty on legitimate submissions */
+      })
+    });
 
-    var name  = document.getElementById('f-name').value.trim();
-    var org   = document.getElementById('f-org').value.trim();
-    var type  = document.getElementById('f-type').value;
-    var email = document.getElementById('f-email').value.trim();
-    var msg   = document.getElementById('f-msg').value.trim();
-
-    // Code quality / UX: inline validation; no alert()
-    var valid = true;
-    if (!name) {
-      showFieldError('f-name', 'err-name', 'Please enter your name.');
-      valid = false;
-    }
-    if (!email || !EMAIL_RE.test(email)) {
-      showFieldError('f-email', 'err-email', 'Please enter a valid email address.');
-      valid = false;
-    }
-    if (!valid) return;
-
-    var btn = document.getElementById('submitBtn');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-
-    try {
-      var res = await fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        // Security: honeypot value included; Formspree will discard submissions where _gotcha is filled
-        body: JSON.stringify({ name: name, org: org, type: type, email: email, message: msg, _gotcha: '' })
-      });
-
-      if (res.ok) {
-        document.getElementById('contactFormWrap').style.display = 'none';
-        document.getElementById('formSuccess').style.display = 'block';
-      } else {
-        document.getElementById('formError').style.display = 'block';
-      }
-    } catch (err) {
+    if (res.ok) {
+      document.getElementById('contactFormWrap').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
       document.getElementById('formError').style.display = 'block';
-    } finally {
-      btn.textContent = 'Send Message';
-      btn.disabled = false;
     }
+  } catch (err) {
+    document.getElementById('formError').style.display = 'block';
+  } finally {
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
   }
+}
+
+/*
+  FIX [CODE/MAJOR + UX/MAJOR]: Form submit event replaces button click,
+  enabling native Enter-to-submit behaviour.
+  FIX [CODE/CRITICAL]: Unhandled Promise rejection caught explicitly.
+*/
+var contactForm = document.getElementById('contactFormWrap');
+contactForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  submitForm().catch(function () {
+    document.getElementById('formError').style.display = 'block';
+  });
+});
+
+/* FIX [UX/MINOR]: "Send another message" resets the form to initial state */
+var resetFormBtn = document.getElementById('resetFormBtn');
+if (resetFormBtn) {
+  resetFormBtn.addEventListener('click', function () {
+    var form = document.getElementById('contactFormWrap');
+    form.reset();
+    form.style.display = '';
+    clearFormErrors();
+    document.getElementById('formSuccess').style.display = 'none';
+    document.getElementById('formError').style.display  = 'none';
+  });
+}
+
+}());
