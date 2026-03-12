@@ -554,6 +554,11 @@ section { padding: 6rem 5%; }
   gap: 0.5rem;
   white-space: nowrap;
 }
+/* FIX [SEC/MAJOR]: Positional inline styles moved to modifier classes */
+.stack-annotation--tl { top: 0; left: 0; }
+.stack-annotation--tr { top: 0; right: 0; }
+.stack-annotation--bl { bottom: 0; left: 0; }
+.stack-annotation--br { bottom: 0; right: 0; }
 
 /* ─── FAQ ─── */
 #faq { background: var(--warm-white); }
@@ -657,6 +662,8 @@ section { padding: 6rem 5%; }
   border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
 }
 .btn-amber:hover { background: var(--amber-light); transform: translateY(-2px); }
+/* FIX [SEC/MAJOR]: Inline style on resetFormBtn moved to modifier class */
+.btn-amber--sm { margin-top: 1rem; font-size: 0.85rem; padding: 0.6rem 1.4rem; }
 
 /* FIX [CODE/CRITICAL]: form-success and form-error are now distinct classes */
 .form-success {
