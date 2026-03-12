@@ -487,7 +487,8 @@ section { padding: 6rem 5%; }
   margin-bottom: 1.2rem; transition: background 0.3s;
 }
 .domain-icon-wrap svg { width: 26px; height: 26px; stroke: var(--amber); fill: none; stroke-width: 1.6; }
-.domain-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; }
+/* SEO/MAJOR: .domain-name is now an h3 — reset browser default h3 margins */
+.domain-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; margin-top: 0; }
 .domain-text { font-size: 0.83rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 1.2rem; }
 .domain-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .domain-tag { font-size: 0.7rem; font-weight: 500; background: rgba(15,31,61,0.05); color: var(--navy-mid); padding: 0.25rem 0.6rem; border-radius: 4px; letter-spacing: 0.02em; }
