@@ -1,46 +1,4 @@
 <!DOCTYPE html>
-<!--
-  ╔══════════════════════════════════════════════════════════════════════════╗
-  ║  PLACEHOLDER MANIFEST — replace before any deployment                   ║
-  ║                                                                          ║
-  ║  %%FORMSPREE_FORM_ID%%  — Formspree form endpoint ID                    ║
-  ║                           Create at formspree.io → copy the 8-char ID   ║
-  ║                           e.g. "xyzabcde"                               ║
-  ║                                                                          ║
-  ║  %%OG_IMAGE_URL%%       — Absolute URL to OG / Twitter social image     ║
-  ║                           e.g. https://roycetruss.com/static/images/    ║
-  ║                                og-image.jpg  (1200×630 px)              ║
-  ║                                                                          ║
-  ╠══════════════════════════════════════════════════════════════════════════╣
-  ║  DEFERRED — require server-side, build-tool, or new-content changes     ║
-  ║                                                                          ║
-  ║  SEC/CRITICAL  Move CSP to HTTP header via Cloudflare Worker            ║
-  ║                _headers file or Worker middleware — meta CSP cannot     ║
-  ║                enforce frame-ancestors (clickjacking) or report-uri.    ║
-  ║                                                                          ║
-  ║  SEC/CRITICAL  Proxy Formspree through a Cloudflare Worker env-var      ║
-  ║                so FORMSPREE_FORM_ID never appears in client source.     ║
-  ║                                                                          ║
-  ║  SEC/MAJOR     style-src 'unsafe-inline' removal — requires migrating   ║
-  ║                all remaining inline styles to classes + nonce injection  ║
-  ║                via Worker.                                               ║
-  ║                                                                          ║
-  ║  PERF/MINOR    Extract noise-texture SVG to static asset for caching.   ║
-  ║                                                                          ║
-  ║  PERF/MINOR    Consolidate 12 stack-item SVGs into a sprite.            ║
-  ║                                                                          ║
-  ║  RESP/MAJOR    Mobile-only condensed trust bar (new content).           ║
-  ║                                                                          ║
-  ║  RESP/MAJOR    320 px breakpoint — confirm overflow on device first.    ║
-  ║                                                                          ║
-  ║  RESP/MINOR    Stack annotations at 769–1024 px — needs device test.    ║
-  ║                                                                          ║
-  ║  UX/MINOR      FAQ accordion via <details>/<summary> (structural).      ║
-  ║                                                                          ║
-  ║  UX/MINOR      Portfolio card cursor:pointer false affordance —         ║
-  ║                requires case-study destination pages.                   ║
-  ╚══════════════════════════════════════════════════════════════════════════╝
--->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
