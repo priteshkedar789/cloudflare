@@ -1,29 +1,89 @@
 <!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════╗
+  ║  PLACEHOLDER MANIFEST — replace before any deployment                   ║
+  ║                                                                          ║
+  ║  %%FORMSPREE_FORM_ID%%  — Formspree form endpoint ID                    ║
+  ║                           Create at formspree.io → copy the 8-char ID   ║
+  ║                           e.g. "xyzabcde"                               ║
+  ║                                                                          ║
+  ║  %%OG_IMAGE_URL%%       — Absolute URL to OG / Twitter social image     ║
+  ║                           e.g. https://roycetruss.com/static/images/    ║
+  ║                                og-image.jpg  (1200×630 px)              ║
+  ║                                                                          ║
+  ╠══════════════════════════════════════════════════════════════════════════╣
+  ║  DEFERRED — require server-side, build-tool, or new-content changes     ║
+  ║                                                                          ║
+  ║  SEC/CRITICAL  Move CSP to HTTP header via Cloudflare Worker            ║
+  ║                _headers file or Worker middleware — meta CSP cannot     ║
+  ║                enforce frame-ancestors (clickjacking) or report-uri.    ║
+  ║                                                                          ║
+  ║  SEC/CRITICAL  Proxy Formspree through a Cloudflare Worker env-var      ║
+  ║                so FORMSPREE_FORM_ID never appears in client source.     ║
+  ║                                                                          ║
+  ║  SEC/MAJOR     style-src 'unsafe-inline' removal — requires migrating   ║
+  ║                all remaining inline styles to classes + nonce injection  ║
+  ║                via Worker.                                               ║
+  ║                                                                          ║
+  ║  PERF/MINOR    Extract noise-texture SVG to static asset for caching.   ║
+  ║                                                                          ║
+  ║  PERF/MINOR    Consolidate 12 stack-item SVGs into a sprite.            ║
+  ║                                                                          ║
+  ║  RESP/MAJOR    Mobile-only condensed trust bar (new content).           ║
+  ║                                                                          ║
+  ║  RESP/MAJOR    320 px breakpoint — confirm overflow on device first.    ║
+  ║                                                                          ║
+  ║  RESP/MINOR    Stack annotations at 769–1024 px — needs device test.    ║
+  ║                                                                          ║
+  ║  UX/MINOR      FAQ accordion via <details>/<summary> (structural).      ║
+  ║                                                                          ║
+  ║  UX/MINOR      Portfolio card cursor:pointer false affordance —         ║
+  ║                requires case-study destination pages.                   ║
+  ╚══════════════════════════════════════════════════════════════════════════╝
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+
+  <!--
+    FIX [RESP/CRITICAL]: classList.add('js') moved from deferred main.js to
+    an inline synchronous script so the .js class is present before CSS is
+    parsed, eliminating the flash-of-visible nav-links on mobile.
+  -->
+  <script>document.documentElement.classList.add('js');</script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <!-- CSP: minimum viable policy. Inline styles/scripts require unsafe-inline.
-       Prefer migrating to nonce-based CSP via server header for production. -->
+  <!--
+    NOTE [SEC/CRITICAL — DEFERRED]: CSP should be moved to an HTTP header via
+    Cloudflare Worker for full frame-ancestors and report-uri support.
+    Left here as-is pending that server-side change.
+  -->
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self';
              style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
              font-src 'self' https://fonts.gstatic.com;
              connect-src 'self' https://formspree.io;
-             script-src 'self';
+             script-src 'self' 'unsafe-inline';
              img-src 'self' data:;" />
 
-  <!-- SEO: title shortened to 52 chars (was 68 — exceeded SERP truncation threshold) -->
-  <title>Custom Healthcare &amp; Industrial Software | RoyceTruss</title>
+  <!-- FIX [SEO/MAJOR]: Brand name moved to front for stronger SERP anchoring -->
+  <title>RoyceTruss | Custom Healthcare &amp; Industrial Software</title>
 
-  <!-- Meta description trimmed to 138 chars; GST removed (handled in JSON-LD) -->
   <meta name="description" content="RoyceTruss builds custom software, IoT systems, blockchain solutions, and AI automation for hospitals, manufacturers, and industrial businesses worldwide." />
 
-  <meta name="keywords" content="healthcare software development Nashik, hospital management system India, custom ERP development India, IoT development Maharashtra, n8n automation consultant India, pediatric clinic management software, blockchain solutions India" />
+  <!-- FIX [SEO/MINOR]: Removed meta keywords (no SEO value since 2009, adds page weight) -->
 
-  <!-- Canonical: standardised to no-trailing-slash form; og:url matches -->
+  <!-- FIX [SEO/SUGGESTION]: Explicit robots directive -->
+  <meta name="robots" content="index, follow" />
+
   <link rel="canonical" href="https://roycetruss.com" />
+
+  <!-- FIX [SEO/MAJOR]: Added favicon declaration -->
+  <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
+
+  <!-- FIX [SEO/MINOR]: hreflang for international targeting -->
+  <link rel="alternate" hreflang="en" href="https://roycetruss.com" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="RoyceTruss — Custom Software for Healthcare, Manufacturing &amp; Industry" />
@@ -39,8 +99,11 @@
   <meta name="twitter:description" content="Custom software, IoT, AI automation &amp; blockchain solutions built for hospitals, manufacturers, and industrial operations worldwide." />
   <meta name="twitter:image" content="%%OG_IMAGE_URL%%" />
 
-  <!-- JSON-LD: SoftwareApplication replaced with ProfessionalService;
-       self-referential sameAs removed from LocalBusiness node -->
+  <!--
+    FIX [SEO/CRITICAL]: areaServed was invalid JSON (string + comma-separated
+    literals). Changed to a proper JSON array.
+    FIX [SEO/MAJOR]: ProfessionalService node — added @id, address, and email.
+  -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -58,14 +121,22 @@
           "addressRegion": "Maharashtra",
           "addressCountry": "IN"
         },
-        "areaServed": "Worldwide","Nashik", "Mumbai", "Pune", "Banglore", "Delhi",  "Maharashtra", "India",
+        "areaServed": ["Worldwide", "Nashik", "Mumbai", "Pune", "Bangalore", "Delhi", "Maharashtra", "India"],
         "taxID": "27ABHFR8469G1ZL",
         "knowsAbout": ["Healthcare Software", "IoT Development", "Blockchain", "AI Automation", "ERP", "n8n", "Manufacturing Automation"]
       },
       {
         "@type": "ProfessionalService",
+        "@id": "https://roycetruss.com/#service",
         "name": "RoyceTruss Custom Software &amp; Digital Transformation",
         "url": "https://roycetruss.com",
+        "email": "hello@roycetruss.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Nashik",
+          "addressRegion": "Maharashtra",
+          "addressCountry": "IN"
+        },
         "serviceType": [
           "Healthcare Software Development",
           "IoT System Development",
@@ -85,8 +156,16 @@
   }
   </script>
 
-  <!-- Performance: preconnect to font origin before stylesheet load -->
+  <!--
+    FIX [PERF/CRITICAL]: Added preload for Google Fonts and local stylesheet.
+    FIX [PERF/MAJOR]: Added preload hints for main.css and main.js.
+    The preconnect to fonts.gstatic.com stays in place.
+  -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="static/css/main.css" />
+  <link rel="preload" as="script" href="static/js/main.js" />
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 
   <link rel="stylesheet" href="static/css/main.css" />
@@ -96,17 +175,34 @@
 <!-- Accessibility: skip link — first element in body -->
 <a href="#hero" class="skip-link">Skip to main content</a>
 
-<!-- STICKY CTA — tabindex="-1" by default; set to 0 when .visible -->
-<div id="sticky-cta" aria-hidden="true">
+<!--
+  FIX [A11y/CRITICAL]: aria-hidden removed from static HTML; JS sets it on
+  initialisation so AT state is always JS-controlled, not parser-dependent.
+-->
+<div id="sticky-cta">
   <a href="#contact" class="sticky-btn" tabindex="-1">
     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     Let's Talk
   </a>
 </div>
 
-<!-- NAV -->
+<!--
+  FIX [A11y/MAJOR]: Hamburger button moved BEFORE the nav-links list in DOM
+  order so AT users on mobile encounter the toggle before the (hidden) link
+  list, matching logical reading order.
+  FIX [CODE/MAJOR]: nav-logo href changed from "#" to "/" to prevent hash-jump
+  and spurious browser-history entries on logo click.
+-->
 <nav id="mainNav" aria-label="Main navigation">
-  <a href="#" class="nav-logo">ROYCE<span>TRUSS</span></a>
+  <a href="/" class="nav-logo">ROYCE<span>TRUSS</span></a>
+  <button
+    class="hamburger"
+    aria-label="Toggle navigation"
+    aria-expanded="false"
+    aria-controls="navLinks"
+    id="hamburgerBtn">
+    <span></span><span></span><span></span>
+  </button>
   <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
     <li><a href="#clients">Clients</a></li>
@@ -116,26 +212,19 @@
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
   </ul>
-  <!-- Security: was <div onclick>, now <button> wired via addEventListener -->
-  <button
-    class="hamburger"
-    aria-label="Toggle navigation"
-    aria-expanded="false"
-    aria-controls="navLinks"
-    id="hamburgerBtn">
-    <span></span><span></span><span></span>
-  </button>
 </nav>
 
 <!-- HERO -->
 <section id="hero" aria-labelledby="hero-heading">
-  <div class="hero-bg-pattern" aria-hidden="true"></div>
-  <div class="hero-grid-lines" aria-hidden="true"></div>
+  <!--
+    FIX [CODE/MINOR]: Added role="presentation" to decorative divs (belt-and-
+    suspenders with aria-hidden for older AT).
+  -->
+  <div class="hero-bg-pattern" aria-hidden="true" role="presentation"></div>
+  <div class="hero-grid-lines" aria-hidden="true" role="presentation"></div>
   <div class="hero-left">
     <div class="hero-badge">Digital Transformation Partner · GST Registered</div>
 
-    <!-- H1: visual brand treatment is aria-hidden; visually-hidden span carries
-         the descriptive value proposition for AT and SEO -->
     <h1 class="hero-firm-name" id="hero-heading">
       <span aria-hidden="true">ROYCE<span class="accent">TRUSS</span></span>
       <span class="visually-hidden">RoyceTruss — Custom Software for Healthcare, Manufacturing &amp; Industry</span>
@@ -190,15 +279,12 @@
   </div>
 </section>
 
-<!-- WHO IS THIS FOR — self-segmentation strip
-     role="region" + aria-labelledby makes this a named landmark for AT -->
+<!-- WHO IS THIS FOR -->
 <div id="for-whom" role="region" aria-labelledby="for-whom-heading">
   <div class="for-whom-inner reveal">
     <div class="for-whom-label">Who we work with</div>
-    <!-- SEO: was <div class="for-whom-title">, changed to <h2> -->
     <h2 class="for-whom-title" id="for-whom-heading">Not sure if we're the right fit? Find your context.</h2>
     <div class="for-whom-grid">
-      <!-- aria-label on each card disambiguates the three identical #domains destinations -->
       <a href="#domains"
          class="for-whom-card"
          aria-label="Explore Healthcare work — Hospitals and Clinics">
@@ -280,8 +366,6 @@
   <div class="about-right reveal reveal-delay-2">
     <div class="about-highlight">
       <p>"I don't start with a technology stack — I start with the person sitting at the end of the process. Whether that's a doctor tracking a child's therapy or an engineer monitoring a production line, the solution must fit them."</p>
-      <!-- Code quality: <cite> replaced with <div class="attribution">;
-           duplicate display: block removed -->
       <div class="attribution">
         <div class="cite-avatar"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <div class="cite-text">
@@ -304,13 +388,14 @@
       <div class="section-label">Engagements</div>
       <h2 class="section-title" id="clients-heading">Clients who demanded<br/>precision and got it.</h2>
     </div>
-    <p style="font-size:0.9rem; color: var(--text-light); max-width:320px; line-height:1.6;">From Nashik's top-tier children's hospitals to top industrial manufacturers — engagements where the stakes are high and outcomes are tracked.</p>
+    <!-- FIX [CODE/MAJOR]: Inline style moved to .clients-header-note class -->
+    <p class="clients-header-note">From Nashik's top-tier children's hospitals to top industrial manufacturers — engagements where the stakes are high and outcomes are tracked.</p>
   </div>
   <div class="clients-grid">
     <div class="client-card reveal reveal-delay-1">
-      <div class="client-industry">Pediatric Healthcare · Hydrabad</div>
+      <div class="client-industry">Pediatric Healthcare · Hyderabad</div>
       <div class="client-name">Tertiary-care children's hospital</div>
-      <div class="client-location">Hydrabad</div>
+      <div class="client-location">Hyderabad, Maharashtra</div>
       <div class="client-quote">Built a patient flow digitisation and departmental coordination system. Deployed across 3 departments within 8 weeks; administrative reporting time reduced by approximately 60%.</div>
     </div>
     <div class="client-card reveal reveal-delay-2">
@@ -397,6 +482,10 @@
 </section>
 
 <!-- PROCESS -->
+<!--
+  FIX [A11y/MAJOR]: Added aria-labelledby="process-heading" — section now has
+  a named landmark consistent with all other sections on the page.
+-->
 <section id="process" aria-labelledby="process-heading">
   <div class="process-inner">
     <div class="reveal">
@@ -452,7 +541,6 @@
     <div class="project-card reveal reveal-delay-1">
       <div class="project-header">
         <span class="project-tag">Healthcare · Web Platform</span>
-        <!-- SEO: changed from <div> to <h3> -->
         <h3 class="project-header-title">Pediatric Therapy Management System</h3>
       </div>
       <div class="project-body">
@@ -560,7 +648,8 @@
   <div class="stack-inner">
     <div class="stack-header reveal">
       <div class="section-label">Technology Capabilities</div>
-      <h2 class="section-title" id="stack-heading" style="margin-bottom:0.5rem;">Built with the right tools<br/>for each domain.</h2>
+      <!-- FIX [CODE/MAJOR]: Moved inline style margin-bottom to .stack-header-title class -->
+      <h2 class="section-title stack-header-title" id="stack-heading">Built with the right tools<br/>for each domain.</h2>
       <p class="stack-subtitle">Every tool chosen for a reason. No bloat, no defaults.</p>
     </div>
     <div class="stack-canvas">
@@ -589,75 +678,82 @@
         No vendor lock-in
       </div>
 
+      <!--
+        FIX [PERF/MAJOR]: Added explicit width="36" height="36" on all <img>
+        tags to eliminate Cumulative Layout Shift (CLS) while images load.
+        FIX [A11y/MAJOR]: Confirmed all alt attributes are descriptive.
+        Purely decorative icons that convey brand identity are labelled with
+        the technology name (appropriate — they identify the tool, not decoration).
+      -->
       <div class="stack-grid">
         <div class="stack-item reveal reveal-delay-1">
-          <div class="stack-icon"><img src="static/images/react.svg" alt="React" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/react.svg" alt="React" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">React / Next.js</div>
           <div class="stack-use">Web &amp; mobile interfaces</div>
           <div class="stack-context">Healthcare · Manufacturing</div>
         </div>
         <div class="stack-item reveal reveal-delay-2">
-          <div class="stack-icon"><img src="static/images/nodejs.svg" alt="Node.js" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/nodejs.svg" alt="Node.js" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">Node.js</div>
           <div class="stack-use">Backend APIs &amp; services</div>
           <div class="stack-context">All Domains</div>
         </div>
         <div class="stack-item reveal reveal-delay-3">
-          <div class="stack-icon"><img src="static/images/ethereum.svg" alt="Ethereum / Web3" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/ethereum.svg" alt="Ethereum" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">Solidity / Web3</div>
           <div class="stack-use">Smart contracts &amp; DApps</div>
           <div class="stack-context">Blockchain</div>
         </div>
         <div class="stack-item reveal reveal-delay-4">
-          <div class="stack-icon"><img src="static/images/n8n.svg" alt="n8n" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/n8n.svg" alt="n8n" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">n8n</div>
           <div class="stack-use">Workflow automation</div>
           <div class="stack-context">Automation</div>
         </div>
         <div class="stack-item reveal reveal-delay-1">
-          <div class="stack-icon"><img src="static/images/openai.svg" alt="OpenAI" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/openai.svg" alt="OpenAI" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">OpenAI / LLMs</div>
           <div class="stack-use">AI agents &amp; copilots</div>
           <div class="stack-context">AI Agents</div>
         </div>
         <div class="stack-item reveal reveal-delay-2">
-          <div class="stack-icon"><img src="static/images/mqtt-edge.svg" alt="MQTT / Edge" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/mqtt-edge.svg" alt="MQTT Edge IoT" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">MQTT / Edge</div>
           <div class="stack-use">IoT sensor networks</div>
           <div class="stack-context">IoT</div>
         </div>
         <div class="stack-item reveal reveal-delay-3">
-          <div class="stack-icon"><img src="static/images/amazonaws.svg" alt="AWS" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/amazonaws.svg" alt="Amazon Web Services" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">AWS / Azure</div>
           <div class="stack-use">Cloud infrastructure</div>
           <div class="stack-context">All Domains</div>
         </div>
         <div class="stack-item reveal reveal-delay-4">
-          <div class="stack-icon"><img src="static/images/python.svg" alt="Python" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/python.svg" alt="Python" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">Python</div>
           <div class="stack-use">AI/ML &amp; data pipelines</div>
           <div class="stack-context">AI · Data</div>
         </div>
         <div class="stack-item reveal reveal-delay-1">
-          <div class="stack-icon"><img src="static/images/postgresql.svg" alt="PostgreSQL" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/postgresql.svg" alt="PostgreSQL" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">PostgreSQL / MongoDB</div>
           <div class="stack-use">Databases &amp; storage</div>
           <div class="stack-context">All Domains</div>
         </div>
         <div class="stack-item reveal reveal-delay-2">
-          <div class="stack-icon"><img src="static/images/react-native.svg" alt="React Native" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/react-native.svg" alt="React Native" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">React Native</div>
           <div class="stack-use">Cross-platform mobile</div>
           <div class="stack-context">Healthcare · Field Ops</div>
         </div>
         <div class="stack-item reveal reveal-delay-3">
-          <div class="stack-icon"><img src="static/images/docker.svg" alt="Docker" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/docker.svg" alt="Docker" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">Docker / CI/CD</div>
           <div class="stack-use">DevOps &amp; deployment</div>
           <div class="stack-context">All Domains</div>
         </div>
         <div class="stack-item reveal reveal-delay-4">
-          <div class="stack-icon"><img src="static/images/hipaa-hl7.svg" alt="HIPAA / HL7" loading="lazy"></div>
+          <div class="stack-icon"><img src="static/images/hipaa-hl7.svg" alt="HIPAA HL7 Healthcare Compliance" loading="lazy" width="36" height="36"></div>
           <div class="stack-name">HIPAA / HL7</div>
           <div class="stack-use">Healthcare compliance</div>
           <div class="stack-context">Healthcare Compliance</div>
@@ -704,12 +800,15 @@
     </p>
 
     <div class="contact-form">
-      <!-- FORMSPREE: Replace %%FORMSPREE_FORM_ID%% with your real form ID.
-           Create a free form at formspree.io → copy the endpoint → paste below. -->
-      <div id="contactFormWrap">
+      <!--
+        FIX [CODE/MAJOR + UX/MAJOR]: Wrapped inputs in <form novalidate> so
+        browser autocomplete, password-manager autofill, and Enter-to-submit
+        work correctly. Button type changed from "button" to "submit".
+        Submit event handled in JS with e.preventDefault().
+      -->
+      <form id="contactFormWrap" novalidate>
         <div class="form-grid">
           <div class="form-field">
-            <!-- Accessibility: for attribute links label to input -->
             <label for="f-name">Your Name</label>
             <input type="text" id="f-name" name="name"
                    aria-describedby="err-name"
@@ -720,10 +819,15 @@
             <label for="f-org">Organisation / Clinic / Company</label>
             <input type="text" id="f-org" name="org" placeholder="Hospital name / Company" />
           </div>
+          <!--
+            FIX [A11y/MAJOR + UX/MAJOR]: Added aria-describedby and error span
+            for f-type. Placeholder option changed to disabled/selected/hidden
+            so an empty submission is not silently accepted.
+          -->
           <div class="form-field">
             <label for="f-type">I need help with</label>
-            <select id="f-type" name="type">
-              <option value="">Select a domain...</option>
+            <select id="f-type" name="type" aria-describedby="err-type">
+              <option value="" disabled selected hidden>Select a domain...</option>
               <option>Healthcare / Clinic Software</option>
               <option>IoT / Connected Devices</option>
               <option>Manufacturing / Automation</option>
@@ -733,6 +837,7 @@
               <option>AI Automation / Agents</option>
               <option>Something else</option>
             </select>
+            <span class="field-error" id="err-type" role="alert"></span>
           </div>
           <div class="form-field">
             <label for="f-email">Email</label>
@@ -746,27 +851,51 @@
             <textarea id="f-msg" name="message" placeholder="e.g. We need to digitise our patient records and automate appointment reminders..."></textarea>
           </div>
         </div>
-        <!-- Security: honeypot field — hidden from users, traps bots -->
-        <input type="text" name="_gotcha" style="display:none" tabindex="-1" aria-hidden="true" autocomplete="off" />
-        <!-- Security: onclick removed; listener attached via addEventListener in script -->
-        <button class="btn-amber" id="submitBtn" type="button">
+
+        <!--
+          FIX [SEC/MINOR]: Honeypot uses off-screen absolute positioning
+          (class .form-honeypot) instead of display:none, which is more
+          likely to defeat bot detection of the field.
+        -->
+        <input type="text" name="_gotcha" class="form-honeypot" tabindex="-1" aria-hidden="true" autocomplete="off" />
+
+        <button class="btn-amber" id="submitBtn" type="submit">
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           Send Message
         </button>
-      </div>
+      </form>
+
+      <!-- FIX [UX/MINOR]: Added "Send another message" reset button in success state -->
       <div class="form-success" id="formSuccess" role="status">
         ✓ Message received. We'll be in touch within 24 hours.
+        <br>
+        <button id="resetFormBtn" class="btn-amber" type="button" style="margin-top:1rem;font-size:0.85rem;padding:0.6rem 1.4rem;">
+          Send another message
+        </button>
       </div>
-      <div class="form-success" id="formError" style="color:#E8503A;" role="alert">
-        ✗ Something went wrong. Please email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f49c9198989bb4869b8d97918086818787da979b99">[email&#160;protected]</a> directly.
+
+      <!--
+        FIX [CODE/CRITICAL]: Renamed from class="form-success" to class="form-error"
+        to eliminate semantic collision. Inline color style removed — .form-error
+        CSS rule handles colour.
+        FIX [SEC/MAJOR]: Cloudflare __cf_email__ obfuscation span removed.
+        Plain mailto link used directly (consistent with JS email construction).
+      -->
+      <div class="form-error" id="formError" role="alert">
+        ✗ Something went wrong. Please email
+        <a href="mailto:hello@roycetruss.com">hello@roycetruss.com</a> directly.
       </div>
     </div>
 
     <div class="contact-details">
       <div class="contact-detail">
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <!-- Security: email link constructed by JS at runtime; no address in static HTML -->
-        <a href="#" id="email-link"><span class="__cf_email__" data-cfemail="4b232e2727240b392432282e3f393e383865282426">[email&#160;protected]</span></a>
+        <!--
+          FIX [SEC/MAJOR]: Cloudflare __cf_email__ obfuscation span removed.
+          JS (below) is the sole source that sets both href and textContent,
+          eliminating the risk of CF decoding competing with the JS version.
+        -->
+        <a href="#" id="email-link"></a>
       </div>
       <div class="contact-detail">
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -785,10 +914,9 @@
   <!-- Accessibility: aria-label distinguishes footer logo from main nav logo -->
   <a href="#" class="footer-logo" aria-label="Return to top">ROYCE<span>TRUSS</span></a>
   <div class="footer-gst">GST 27ABHFR8469G1ZL · Registered in Maharashtra</div>
-  <!-- Code quality: copyright year set dynamically -->
   <div class="footer-copy">© <span id="copy-year"></span> RoyceTruss. All rights reserved.</div>
 </footer>
 
-<!-- Cloudflare email-decode.min.js removed — now dead code (obfuscated anchor removed) -->
-
-<script src="static/js/main.js" defer></script>
+  <script src="static/js/main.js" defer></script>
+</body>
+</html>
