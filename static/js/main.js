@@ -81,7 +81,7 @@ window.addEventListener('resize', function () {
 });
 
 /* ── Contact form → Google Sheets via Apps Script ───────────── */
-var FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwEt7DglGeDUwd9HaeGGNjeAP5baiLVJvdBLrKqcYry9htz6d2FGkDXOczx35un1qWhmg/exec';
+var FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyy7qgNkTG4pwarvrcnzJznpypJDfaP5QtNeW04kEbNCRH99VF06EfS7AISWFRR-qSijw/exec';
 var EMAIL_RE      = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /*
