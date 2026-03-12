@@ -487,8 +487,7 @@ section { padding: 6rem 5%; }
   margin-bottom: 1.2rem; transition: background 0.3s;
 }
 .domain-icon-wrap svg { width: 26px; height: 26px; stroke: var(--amber); fill: none; stroke-width: 1.6; }
-/* SEO/MAJOR: .domain-name is now an h3 — reset browser default h3 margins */
-.domain-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; margin-top: 0; }
+.domain-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; }
 .domain-text { font-size: 0.83rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 1.2rem; }
 .domain-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .domain-tag { font-size: 0.7rem; font-weight: 500; background: rgba(15,31,61,0.05); color: var(--navy-mid); padding: 0.25rem 0.6rem; border-radius: 4px; letter-spacing: 0.02em; }
@@ -555,11 +554,6 @@ section { padding: 6rem 5%; }
   gap: 0.5rem;
   white-space: nowrap;
 }
-/* FIX [SEC/MAJOR]: Positional inline styles moved to modifier classes */
-.stack-annotation--tl { top: 0; left: 0; }
-.stack-annotation--tr { top: 0; right: 0; }
-.stack-annotation--bl { bottom: 0; left: 0; }
-.stack-annotation--br { bottom: 0; right: 0; }
 
 /* ─── FAQ ─── */
 #faq { background: var(--warm-white); }
@@ -663,8 +657,6 @@ section { padding: 6rem 5%; }
   border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
 }
 .btn-amber:hover { background: var(--amber-light); transform: translateY(-2px); }
-/* FIX [SEC/MAJOR]: Inline style on resetFormBtn moved to modifier class */
-.btn-amber--sm { margin-top: 1rem; font-size: 0.85rem; padding: 0.6rem 1.4rem; }
 
 /* FIX [CODE/CRITICAL]: form-success and form-error are now distinct classes */
 .form-success {
