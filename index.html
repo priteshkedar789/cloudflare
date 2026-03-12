@@ -83,27 +83,32 @@
   <!-- FIX [SEO/SUGGESTION]: Explicit robots directive -->
   <meta name="robots" content="index, follow" />
 
-  <link rel="canonical" href="https://roycetruss.com" />
+  <link rel="canonical" href="https://roycetruss.com/" />
 
-  <!-- FIX [SEO/MAJOR]: Added favicon declaration -->
-  <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
+  <!-- FIX [SEO/MAJOR]: Use existing SVG brand asset as favicon to avoid 404 -->
+  <link rel="icon" href="/static/images/Logo.svg" type="image/svg+xml" />
 
   <!-- FIX [SEO/MINOR]: hreflang for international targeting -->
-  <link rel="alternate" hreflang="en" href="https://roycetruss.com" />
+  <link rel="alternate" hreflang="en" href="https://roycetruss.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://roycetruss.com/" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="RoyceTruss — Custom Software for Healthcare, Manufacturing &amp; Industry" />
   <meta property="og:description" content="Industry-native digital transformation. Custom software, IoT, AI automation, and blockchain solutions built for how your industry actually works." />
-  <meta property="og:url" content="https://roycetruss.com" />
+  <meta property="og:url" content="https://roycetruss.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_IN" />
-  <meta property="og:image" content="%%OG_IMAGE_URL%%" />
+  <meta property="og:image" content="https://roycetruss.com/static/images/og-image.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="RoyceTruss - Custom software, IoT, and AI automation for healthcare and industrial businesses" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="RoyceTruss — Digital Transformation for Healthcare &amp; Industry" />
   <meta name="twitter:description" content="Custom software, IoT, AI automation &amp; blockchain solutions built for hospitals, manufacturers, and industrial operations worldwide." />
-  <meta name="twitter:image" content="%%OG_IMAGE_URL%%" />
+  <meta name="twitter:image" content="https://roycetruss.com/static/images/og-image.svg" />
+  <meta name="twitter:image:alt" content="RoyceTruss - Custom software, IoT, and AI automation for healthcare and industrial businesses" />
 
   <!--
     FIX [SEO/CRITICAL]: areaServed was invalid JSON (string + comma-separated
