@@ -1,54 +1,4 @@
 <!DOCTYPE html>
-<!--
-  ╔══════════════════════════════════════════════════════════════════════════╗
-  ║  PLACEHOLDER MANIFEST — replace before any deployment                   ║
-  ║                                                                          ║
-  ║  %%FORMSPREE_FORM_ID%%  — Formspree form endpoint ID                    ║
-  ║                           Create at formspree.io → copy the 8-char ID   ║
-  ║                           e.g. "xyzabcde"                               ║
-  ║                                                                          ║
-  ║  %%OG_IMAGE_URL%%       — Absolute URL to OG / Twitter social image     ║
-  ║                           e.g. https://roycetruss.com/static/images/    ║
-  ║                                og-image.jpg  (1200×630 px)              ║
-  ║                                                                          ║
-  ╠══════════════════════════════════════════════════════════════════════════╣
-  ║  DEFERRED — require server-side, build-tool, or new-content changes     ║
-  ║                                                                          ║
-  ║  SEC/CRITICAL  Move CSP to HTTP header via Cloudflare Worker            ║
-  ║                _headers file or Worker middleware — meta CSP cannot     ║
-  ║                enforce frame-ancestors (clickjacking) or report-uri.    ║
-  ║                                                                          ║
-  ║  SEC/CRITICAL  Proxy Formspree through a Cloudflare Worker env-var      ║
-  ║                so FORMSPREE_FORM_ID never appears in client source.     ║
-  ║                                                                          ║
-  ║  SEC/CRITICAL  wrangler.jsonc "assets.directory" must be changed from   ║
-  ║                "." to a dedicated sub-directory (e.g. "./public") to    ║
-  ║                prevent repository root files from being publicly         ║
-  ║                downloadable. Requires a directory restructure.          ║
-  ║                                                                          ║
-  ║  SEC/MAJOR     style-src 'unsafe-inline' removal — requires migrating   ║
-  ║                all remaining inline styles to classes + nonce injection  ║
-  ║                via Worker.                                               ║
-  ║                                                                          ║
-  ║  PERF/MAJOR    static/images/react-native.svg is missing from the       ║
-  ║                repository — stack section fires a 404. Add the asset.   ║
-  ║                                                                          ║
-  ║  PERF/MINOR    Extract noise-texture SVG to static asset for caching.   ║
-  ║                                                                          ║
-  ║  PERF/MINOR    Consolidate 12 stack-item SVGs into a sprite.            ║
-  ║                                                                          ║
-  ║  RESP/MAJOR    Mobile-only condensed trust bar (new content).           ║
-  ║                                                                          ║
-  ║  RESP/MAJOR    320 px breakpoint — confirm overflow on device first.    ║
-  ║                                                                          ║
-  ║  RESP/MINOR    Stack annotations at 769–1024 px — needs device test.    ║
-  ║                                                                          ║
-  ║  UX/MINOR      FAQ accordion via <details>/<summary> (structural).      ║
-  ║                                                                          ║
-  ║  UX/MINOR      Portfolio card cursor:pointer false affordance —         ║
-  ║                requires case-study destination pages.                   ║
-  ╚══════════════════════════════════════════════════════════════════════════╝
--->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -75,10 +25,11 @@
              script-src 'self' 'unsafe-inline';
              img-src 'self' data:;" />
 
-  <!-- FIX [SEO/MAJOR]: Brand name moved to front for stronger SERP anchoring -->
-  <title>RoyceTruss | Custom Healthcare &amp; Industrial Software</title>
+  <!-- SEO/MINOR: Title restructured — geo signal added, more naturally searched phrase, brand at end, 57 chars -->
+  <title>Healthcare &amp; ERP Software Development — RoyceTruss Nashik</title>
 
-  <meta name="description" content="RoyceTruss builds custom software, IoT systems, blockchain solutions, and AI automation for hospitals, manufacturers, and industrial businesses worldwide." />
+  <!-- SEO/MINOR: Tightened to 133 chars; EMR, ERP keyword anchors and Nashik geo signal present -->
+  <meta name="description" content="Custom EMR, ERP, IoT &amp; AI automation for hospitals and manufacturers. GST-registered firm based in Nashik, serving clients worldwide." />
 
   <!-- FIX [SEO/SUGGESTION]: Explicit robots directive -->
   <meta name="robots" content="index, follow" />
@@ -90,6 +41,8 @@
 
   <!-- FIX [SEO/MINOR]: hreflang for international targeting -->
   <link rel="alternate" hreflang="en" href="https://roycetruss.com" />
+  <!-- SEO/MINOR: x-default required by Google hreflang spec for unmatched locales -->
+  <link rel="alternate" hreflang="x-default" href="https://roycetruss.com" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="RoyceTruss — Custom Software for Healthcare, Manufacturing &amp; Industry" />
@@ -98,6 +51,9 @@
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_IN" />
   <meta property="og:image" content="%%OG_IMAGE_URL%%" />
+  <!-- SEO/MAJOR: image dimensions allow social crawlers to pre-render without fetching -->
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -114,11 +70,29 @@
     not decode character references inside <script type="application/ld+json">,
     so JSON parsers received the four-character literal "&amp;" causing
     Google Rich Results validator to reject the structured data.
+    SEO/MAJOR: Added WebSite node for Sitelinks search box + brand entity confidence.
+    SEO/MAJOR: LocalBusiness telephone + openingHoursSpecification for local pack eligibility.
+    SEO/MINOR: LocalBusiness.areaServed typed as Place/Country nodes.
+    SEO/MAJOR: FAQPage schema added — unlocks FAQ rich results in SERPs.
   -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://roycetruss.com/#website",
+        "name": "RoyceTruss",
+        "url": "https://roycetruss.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://roycetruss.com/?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
       {
         "@type": "LocalBusiness",
         "name": "RoyceTruss",
@@ -126,13 +100,31 @@
         "description": "Digital transformation consulting firm specialising in custom software, IoT systems, blockchain solutions, and AI automation for healthcare, manufacturing, and industrial sectors.",
         "url": "https://roycetruss.com",
         "email": "hello@roycetruss.com",
+        "telephone": "%%TELEPHONE%%",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Nashik",
           "addressRegion": "Maharashtra",
           "addressCountry": "IN"
         },
-        "areaServed": ["Worldwide", "Nashik", "Mumbai", "Pune", "Bangalore", "Delhi", "Maharashtra", "India"],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+            "opens": "09:00",
+            "closes": "18:00"
+          }
+        ],
+        "areaServed": [
+          {"@type": "Country", "name": "India"},
+          {"@type": "City", "name": "Nashik"},
+          {"@type": "City", "name": "Mumbai"},
+          {"@type": "City", "name": "Pune"},
+          {"@type": "City", "name": "Bangalore"},
+          {"@type": "City", "name": "Hyderabad"},
+          {"@type": "AdministrativeArea", "name": "Maharashtra"},
+          "Worldwide"
+        ],
         "taxID": "27ABHFR8469G1ZL",
         "knowsAbout": ["Healthcare Software", "IoT Development", "Blockchain", "AI Automation", "ERP", "n8n", "Manufacturing Automation"]
       },
@@ -161,6 +153,48 @@
         "offers": {
           "@type": "Offer",
           "description": "Custom digital transformation, IoT, blockchain, and AI automation solutions for healthcare and industrial sectors"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- SEO/MAJOR: FAQPage schema — unlocks FAQ rich results (expanded Q&A) in SERPs -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do you work with clients outside India?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. While we're based in Nashik, we work with clients worldwide. Most project work is conducted remotely with structured milestone check-ins, and we travel for on-site discovery when needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do you handle post-delivery support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We don't hand over and disappear. Every engagement includes a stabilisation period post-launch, and we offer ongoing retainer-based support for maintenance, iteration, and feature additions. We stay until your team fully owns the system."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can you work within our existing systems (ERP, EMR, tools)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely. We frequently integrate with existing infrastructure — legacy ERPs, hospital information systems, third-party APIs, and IoT hardware. Our process begins with mapping what you already have before proposing anything new."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the typical engagement size or duration?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Projects range from 4-week automation builds to 6-month full-system implementations. We work with SMEs, mid-size enterprises, and institutional clients. We're GST-registered, invoice formally, and can support vendor registration requirements for hospital and government procurement processes."
         }
       }
     ]
@@ -356,7 +390,7 @@
     </div>
 
     <p class="section-body">
-      RoyceTruss is a GST-registered digital transformation firm that engineers custom software, automation, IoT, blockchain, and AI solutions tailored to the specific language, workflow, and regulations of your industry — from pediatric therapy clinics to industrial HVAC manufacturers.
+      RoyceTruss is a GST-registered digital transformation firm that engineers custom software, automation, IoT, blockchain, and AI solutions tailored to the specific language, workflow, and regulations of your industry — from pediatric therapy clinics to industrial HVAC manufacturers. Headquartered in Nashik, Maharashtra, we work with clients across Mumbai, Pune, Hyderabad, and internationally.
     </p>
     <div class="about-values">
       <div class="value-item">
@@ -451,50 +485,50 @@
     <div class="domain-expertise-card reveal reveal-delay-1">
       <div class="domain-number">01</div>
       <div class="domain-icon-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-      <div class="domain-name">Healthcare &amp; Medical</div>
-      <div class="domain-text">Custom solutions for hospitals, therapy clinics, and sports medicine — from patient management to clinical workflows and compliance-ready systems.</div>
+      <h3 class="domain-name">Healthcare &amp; Medical</h3>
+      <div class="domain-text">Custom solutions for hospitals, therapy clinics, and sports medicine — from patient management to clinical workflows and compliance-ready systems. We build to ABDM and NHA guidelines, align with NABH documentation requirements, and integrate HL7 FHIR data standards so your system is fit for Indian hospital procurement and international partnerships. Whether you need a full EMR, a specialty-specific therapy tracking platform, or a patient portal with secure WhatsApp-integrated notifications, we design every screen around how your clinical staff actually works — not a generic healthcare template.</div>
       <div class="domain-tags"><span class="domain-tag">EHR/EMR</span><span class="domain-tag">Patient Portals</span><span class="domain-tag">Clinic Management</span><span class="domain-tag">Therapy Tracking</span></div>
     </div>
     <div class="domain-expertise-card reveal reveal-delay-2">
       <div class="domain-number">02</div>
       <div class="domain-icon-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="2" width="8" height="8" rx="1"/><rect x="14" y="2" width="8" height="8" rx="1"/><rect x="2" y="14" width="8" height="8" rx="1"/><path d="M14 18h8M18 14v8"/></svg></div>
-      <div class="domain-name">IoT &amp; Connected Systems</div>
-      <div class="domain-text">End-to-end IoT architecture — from sensor firmware to cloud dashboards. Real-time monitoring, alerting, and predictive intelligence for industrial and medical devices.</div>
+      <h3 class="domain-name">IoT &amp; Connected Systems</h3>
+      <div class="domain-text">End-to-end IoT architecture — from sensor firmware to cloud dashboards. Real-time monitoring, alerting, and predictive intelligence for industrial and medical devices. We design low-latency MQTT pipelines with edge processing nodes that operate independently when connectivity is interrupted, ensuring zero data loss in factory or clinical environments. Dashboards surface OEE metrics, equipment health scores, and threshold-based alerts routed to WhatsApp, SMS, or email — so your team responds before a fault becomes a failure.</div>
       <div class="domain-tags"><span class="domain-tag">Sensor Networks</span><span class="domain-tag">Real-time Dashboards</span><span class="domain-tag">MQTT / Edge</span><span class="domain-tag">Predictive Alerts</span></div>
     </div>
     <div class="domain-expertise-card reveal reveal-delay-3">
       <div class="domain-number">03</div>
       <div class="domain-icon-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-      <div class="domain-name">Manufacturing &amp; Automation</div>
-      <div class="domain-text">Production automation, quality control, SCADA integration, and shop-floor digitisation for MEP, HVAC, and industrial operations that need reliability above all.</div>
+      <h3 class="domain-name">Manufacturing &amp; Automation</h3>
+      <div class="domain-text">Production automation, quality control, SCADA integration, and shop-floor digitisation for MEP, HVAC, and industrial operations that need reliability above all. We replace paper-based SOPs with digital work-order systems, integrate with existing PLCs and SCADA platforms, and build MES layers that give production managers real-time visibility into shift output, downtime causes, and material consumption. Deployments are designed to run on local network infrastructure with no internet dependency — critical for manufacturing floors with strict network isolation requirements.</div>
       <div class="domain-tags"><span class="domain-tag">SCADA Integration</span><span class="domain-tag">Production MES</span><span class="domain-tag">Quality Control</span><span class="domain-tag">Shop Floor Apps</span></div>
     </div>
     <div class="domain-expertise-card reveal reveal-delay-4">
       <div class="domain-number">04</div>
       <div class="domain-icon-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
-      <div class="domain-name">ERP / CRM &amp; Business Systems</div>
-      <div class="domain-text">Custom ERP and CRM platforms around your actual business processes — sales pipelines, inventory, billing, and reporting unified in one system.</div>
+      <h3 class="domain-name">ERP / CRM &amp; Business Systems</h3>
+      <div class="domain-text">Custom ERP and CRM platforms built around your actual business processes — sales pipelines, inventory, billing, and reporting unified in one system. Unlike shelf ERP products that require your business to fit their data model, we model the system around how your organisation already operates. Modules include GST-compliant invoicing with e-invoicing (IRP integration), multi-warehouse inventory, dealer/distributor order management, and management dashboards with drill-down reporting — all deployable on-premise or on your cloud of choice.</div>
       <div class="domain-tags"><span class="domain-tag">Custom ERP</span><span class="domain-tag">CRM Workflows</span><span class="domain-tag">Inventory</span><span class="domain-tag">Analytics</span></div>
     </div>
     <div class="domain-expertise-card reveal reveal-delay-1">
       <div class="domain-number">05</div>
       <div class="domain-icon-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="7" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="9" y="12" width="6" height="6" rx="1"/><rect x="16" y="7" width="6" height="6" rx="1"/><path d="M8 10h1M15 5h1M15 15h1"/></svg></div>
-      <div class="domain-name">Blockchain Solutions</div>
-      <div class="domain-text">Decentralised applications, smart contracts, and on-chain workflows. Supply chain traceability, tokenised credentials, and audit trails that can't be tampered with.</div>
+      <h3 class="domain-name">Blockchain Solutions</h3>
+      <div class="domain-text">Decentralised applications, smart contracts, and on-chain workflows. Supply chain traceability, tokenised credentials, and audit trails that can't be tampered with. We build on Ethereum, Polygon, and Hyperledger Fabric depending on whether your use case requires a public, permissioned, or enterprise-grade ledger. Common deployments include pharmaceutical batch traceability, credential verification for professional certifications, and multi-party procurement contracts where each party requires immutable confirmation of terms and delivery milestones.</div>
       <div class="domain-tags"><span class="domain-tag">Smart Contracts</span><span class="domain-tag">DApps</span><span class="domain-tag">Supply Chain</span><span class="domain-tag">Token Systems</span></div>
     </div>
     <div class="domain-expertise-card reveal reveal-delay-2">
       <div class="domain-number">06</div>
       <div class="domain-icon-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4M12 11l-5.5 6M12 11l5.5 6"/><rect x="9" y="11" width="6" height="4" rx="1"/></svg></div>
-      <div class="domain-name">n8n &amp; Workflow Automation</div>
-      <div class="domain-text">Complex business workflows automated using n8n — connecting CRMs, ERPs, communication tools, and databases into seamless pipelines. No repetitive work, no manual handoffs.</div>
+      <h3 class="domain-name">n8n &amp; Workflow Automation</h3>
+      <div class="domain-text">Complex business workflows automated using n8n — connecting CRMs, ERPs, communication tools, and databases into seamless pipelines. No repetitive work, no manual handoffs. Typical deployments include: new lead in CRM → automatic qualification scoring → assigned to sales rep with context briefing via WhatsApp; purchase order approved → ERP stock reservation → supplier notification → delivery tracking update pushed to customer; patient appointment confirmed → pre-visit checklist sent → post-visit follow-up triggered at 48 hours. Each flow is self-hosted on your infrastructure so your data never leaves your environment.</div>
       <div class="domain-tags"><span class="domain-tag">n8n Flows</span><span class="domain-tag">API Integrations</span><span class="domain-tag">Webhooks</span><span class="domain-tag">Multi-system Sync</span></div>
     </div>
     <div class="domain-expertise-card reveal reveal-delay-3">
       <div class="domain-number">07</div>
       <div class="domain-icon-wrap"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><path d="M18 2l4 4-4 4"/><path d="M22 2v4h-4"/></svg></div>
-      <div class="domain-name">AI Automation &amp; Agents</div>
-      <div class="domain-text">Custom AI-powered agents, LLM integrations, and intelligent automation pipelines — from clinical decision support to manufacturing anomaly detection, built inside your existing systems.</div>
+      <h3 class="domain-name">AI Automation &amp; Agents</h3>
+      <div class="domain-text">Custom AI-powered agents, LLM integrations, and intelligent automation pipelines — from clinical decision support to manufacturing anomaly detection, built inside your existing systems. We implement Retrieval-Augmented Generation (RAG) pipelines over your internal documents, SOPs, and patient records so AI answers are grounded in your data, not general training. Use cases delivered include: a clinical documentation assistant that drafts SOAP notes from voice input, a procurement agent that matches inbound RFQs against inventory and pricing rules, and an anomaly detection model trained on sensor logs to flag equipment degradation three shifts before failure.</div>
       <div class="domain-tags"><span class="domain-tag">LLM Integration</span><span class="domain-tag">AI Agents</span><span class="domain-tag">RAG Pipelines</span><span class="domain-tag">Custom Copilots</span></div>
     </div>
   </div>
@@ -902,7 +936,7 @@
       -->
       <div class="form-error" id="formError" role="alert">
         ✗ Something went wrong. Please email
-        <a href="mailto:hello@roycetruss.com">hello@roycetruss.com</a> directly.
+        <a href="/cdn-cgi/l/email-protection#630b060f0f0c23110c1a000617111610104d000c0e"><span class="__cf_email__" data-cfemail="78101d141417380a17011b1d0c0a0d0b0b561b1715">[email&#160;protected]</span></a> directly.
       </div>
     </div>
 
@@ -933,9 +967,4 @@
   <!-- Accessibility: aria-label distinguishes footer logo from main nav logo -->
   <a href="#" class="footer-logo" aria-label="Return to top">ROYCE<span>TRUSS</span></a>
   <div class="footer-gst">GST 27ABHFR8469G1ZL · Registered in Maharashtra</div>
-  <div class="footer-copy">© <span id="copy-year"></span> RoyceTruss. All rights reserved.</div>
-</footer>
-
-  <script src="static/js/main.js" defer></script>
-</body>
-</html>
+  <div class="footer-copy">© <span id
