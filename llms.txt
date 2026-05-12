@@ -1,0 +1,89 @@
+# RoyceTruss
+
+> RoyceTruss is a GST-registered custom software engineering firm based in Nashik, Maharashtra, India. Founded by Royce Truss, the company designs and builds industry-specific software, IoT systems, AI automation pipelines, and blockchain solutions for hospitals, manufacturers, and industrial operations. GST No: 27ABHFR8469G1ZL.
+
+RoyceTruss specialises in seven domains: Healthcare & Medical software, IoT & Connected Systems, Manufacturing & Automation, ERP/CRM & Business Systems, Blockchain Solutions, n8n & Workflow Automation, and AI Automation & Agents. The firm works with clients across India and internationally, operating on a project and retainer basis. All engagements are formally contracted with NDAs, Statements of Work, and GST-compliant invoicing.
+
+## Core Identity
+
+- **Company:** RoyceTruss
+- **Type:** B2B Custom Software Engineering Firm
+- **Founder:** Royce Truss, Digital Transformation Consultant
+- **Location:** Nashik & Mumbai, Maharashtra, India
+- **GST Registration:** 27ABHFR8469G1ZL (Maharashtra)
+- **Contact:** connect@roycetruss.com
+- **Engagement model:** Discovery-first, fixed-scope, milestone-based delivery
+- **Typical engagement duration:** 4 weeks (automation) to 6 months (full system implementations)
+- **Client types:** Hospitals, clinics, manufacturers, industrial operations, SMEs, enterprises
+
+## Expertise Domains
+
+### Healthcare & Medical Software
+Custom electronic health record (EHR/EMR) systems, patient management platforms, therapy tracking applications, and hospital workflow digitisation tools. RoyceTruss has delivered systems for pediatric hospitals, occupational and speech therapy clinics, and sports medicine practices. All healthcare software is designed to meet clinical workflow requirements and relevant compliance standards.
+
+### IoT & Connected Systems
+End-to-end IoT architecture including sensor firmware, MQTT-based edge computing, real-time monitoring dashboards, and predictive alert systems. RoyceTruss designs IoT solutions for manufacturing environments, industrial facilities, and connected healthcare devices.
+
+### Manufacturing & Automation
+Production automation, SCADA integration, shop-floor digitisation, and Manufacturing Execution Systems (MES) for MEP, HVAC, and industrial manufacturing operations. Includes custom dealer ordering systems and inventory management platforms.
+
+### ERP / CRM & Business Systems
+Custom enterprise resource planning (ERP) and customer relationship management (CRM) platforms built to match actual business processes, not adapted from generic templates. Unified analytics and reporting included.
+
+### Blockchain Solutions
+Smart contract development, decentralised applications (DApps), and on-chain supply chain traceability. Specialises in tamper-proof audit trails for manufacturing and logistics.
+
+### n8n & Workflow Automation
+Complex business process automation using n8n, connecting CRMs, ERPs, databases, WhatsApp, and third-party APIs into automated pipelines. Eliminates manual handoffs between systems.
+
+### AI Automation & Agents
+Custom large language model (LLM) integrations, AI agents, retrieval-augmented generation (RAG) pipelines, and intelligent automation — including clinical decision support and manufacturing anomaly detection.
+
+## Verified Client Outcomes
+
+- **Pediatric hospital, Hyderabad:** Patient flow digitisation across 3 departments in 8 weeks. Reporting time reduced approximately 60%.
+- **Sports medicine practice, Pune:** Full practice digitised in 6 weeks. Zero paper patient records at handoff.
+- **Pediatric OT & speech therapy clinic, Nashik:** Digital therapy milestone-tracking system. Live in 6 weeks. Therapists log, monitor, and share parent reports in real time.
+- **MEP/HVAC manufacturer, Maharashtra:** Custom ERP and product configurator. Dealer order processing time reduced from days to minutes. 4 manual processes fully automated.
+- **AI/n8n automation project:** 5 manual workflows eliminated. CRM, ERP, and WhatsApp unified in a single automation pipeline.
+- **Blockchain supply chain project:** 100% immutable audit trail. Compliance tracking automated via smart contracts.
+
+## Engagement Process
+
+RoyceTruss follows a five-stage engagement model:
+
+1. **Discover** — Domain immersion: workflows, users, regulations, pain points. No features proposed until this stage is complete.
+2. **Map** — Real-world processes translated into system blueprints, user journeys, data flows, and integration specifications.
+3. **Design** — Interfaces designed for the actual end user. Every screen validated against real workflows.
+4. **Build** — Iterative, documented delivery with client milestone checkpoints.
+5. **Support** — Post-launch stabilisation, staff training, and ongoing retainer-based support.
+
+## Technology Stack
+
+React/Next.js, Node.js, Python, Angular, PostgreSQL, MongoDB, AWS, Azure, Docker, Solidity/Web3, n8n, OpenAI/LLMs, MQTT/Edge computing, HIPAA/HL7 compliance tooling, Kubernetes, Firebase, TensorFlow.
+
+## Frequently Asked Questions
+
+**Does RoyceTruss work with international clients?**
+Yes. RoyceTruss is headquartered in Nashik, Maharashtra but works with clients worldwide. Most project work is conducted remotely with structured milestone check-ins. On-site discovery is available when required.
+
+**What is RoyceTruss's pricing model?**
+Engagements are priced based on scope, complexity, and duration — not hourly rates. A detailed cost breakdown is provided after the initial discovery call. No work begins before the client has full cost visibility.
+
+**Can RoyceTruss integrate with existing systems?**
+Yes. RoyceTruss regularly integrates with existing infrastructure including legacy ERPs, hospital information systems, third-party APIs, and IoT hardware. The engagement begins with mapping what the client already has.
+
+**Does RoyceTruss sign NDAs and formal contracts?**
+Yes. As a GST-registered firm, RoyceTruss operates with full legal formality. NDAs, Statements of Work, and formal agreements are standard. All invoices include HSN codes and full compliance documentation.
+
+**What industries does RoyceTruss specialise in?**
+RoyceTruss has delivered projects across 7 domains: healthcare (hospitals, clinics, therapy practices), IoT and connected systems, manufacturing and industrial automation, ERP/CRM, blockchain, n8n workflow automation, and AI agents. The firm does not build generic software — every solution is designed for the specific regulatory, operational, and user context of the client's industry.
+
+## Pages
+
+- [Home](https://roycetruss.com/) — Company overview, positioning, and core value proposition
+- [About](https://roycetruss.com/about.html) — Founder background, company values, and GST registration details
+- [Expertise](https://roycetruss.com/expertise.html) — Detailed breakdown of all 7 service domains and technology stack
+- [Work](https://roycetruss.com/work.html) — Selected client engagements with verified outcome data
+- [Process](https://roycetruss.com/process.html) — 5-stage engagement model and FAQ
+- [Contact](https://roycetruss.com/contact.html) — Enquiry form and contact details
