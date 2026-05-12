@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>document.documentElement.classList.add('js');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — RoyceTruss | Start a Conversation</title>
+  <meta name="description" content="Get in touch with RoyceTruss. Whether you're a clinic going paperless, a manufacturer exploring automation, or a business needing a system built from the ground up — start here." />
+  <link rel="canonical" href="https://roycetruss.com/contact.html" />
+  <link rel="icon" href="/static/images/Logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" /></noscript>
+  <link rel="stylesheet" href="/static/css/site.css" />
+  <style>
+    .contact-section.page-first {
+      padding-top: calc(var(--nav-h) + var(--space-2xl));
+      min-height: 100svh;
+    }
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav id="mainNav" aria-label="Main navigation">
+  <a href="/" class="nav-logo" aria-label="RoyceTruss home">ROYCE<span>TRUSS</span></a>
+  <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks" id="hamburgerBtn">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/about.html">About</a></li>
+    <li><a href="/expertise.html">Expertise</a></li>
+    <li><a href="/work.html">Work</a></li>
+    <li><a href="/process.html">Process</a></li>
+    <li><a href="/contact.html" class="nav-cta" aria-current="page">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+<section class="section contact-section page-first" aria-labelledby="contact-heading">
+  <div class="contact-inner">
+    <div class="section-eyebrow">Get in Touch</div>
+    <h1 class="section-title" id="contact-heading">Let's build something that actually fits.</h1>
+    <p class="contact-tagline">Whether you're a clinic going paperless, a manufacturer exploring automation, or a business needing a system built from the ground up — start here.</p>
+    <div class="contact-form-box">
+      <form id="contactFormWrap" novalidate>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-name">Your Name <span aria-hidden="true">*</span></label>
+            <input type="text" id="f-name" name="name" aria-describedby="err-name" placeholder="Dr. Sharma / Mr. Patel" autocomplete="name" required />
+            <span class="field-error" id="err-name" role="alert"></span>
+          </div>
+          <div class="form-field">
+            <label for="f-org">Organisation / Clinic / Company</label>
+            <input type="text" id="f-org" name="org" placeholder="Hospital name / Company" autocomplete="organization" />
+          </div>
+          <div class="form-field">
+            <label for="f-type">I need help with <span aria-hidden="true">*</span></label>
+            <select id="f-type" name="type" aria-describedby="err-type" required>
+              <option value="" disabled selected hidden>Select a domain...</option>
+              <option>Healthcare / Clinic Software</option>
+              <option>IoT / Connected Devices</option>
+              <option>Manufacturing / Automation</option>
+              <option>ERP / CRM System</option>
+              <option>Blockchain Solution</option>
+              <option>n8n / Workflow Automation</option>
+              <option>AI Automation / Agents</option>
+              <option>Something else</option>
+            </select>
+            <span class="field-error" id="err-type" role="alert"></span>
+          </div>
+          <div class="form-field">
+            <label for="f-email">Email <span aria-hidden="true">*</span></label>
+            <input type="email" id="f-email" name="email" aria-describedby="err-email" placeholder="you@organisation.com" autocomplete="email" required />
+            <span class="field-error" id="err-email" role="alert"></span>
+          </div>
+          <div class="form-field form-full">
+            <label for="f-msg">Briefly, what are you trying to solve?</label>
+            <textarea id="f-msg" name="message" placeholder="e.g. We need to digitise our patient records across 3 departments..."></textarea>
+          </div>
+        </div>
+        <input type="text" name="_gotcha" class="form-honeypot" tabindex="-1" aria-hidden="true" autocomplete="off" />
+        <button class="btn-amber" id="submitBtn" type="submit">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Send Message
+        </button>
+      </form>
+      <div class="form-success" id="formSuccess" role="status">
+        ✓ Message received. We'll be in touch within 24 hours.
+        <br><button id="resetFormBtn" class="btn-amber" style="margin-top:1rem;font-size:0.8rem;padding:0.6rem 1.2rem" type="button">Send another message</button>
+      </div>
+      <div class="form-error-msg" id="formError" role="alert">
+        ✗ Something went wrong. Please email <a id="email-link-fallback" href="mailto:connect@roycetruss.com">connect@roycetruss.com</a> directly.
+      </div>
+    </div>
+    <div class="contact-details">
+      <div class="contact-detail">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="#" id="email-link"></a>
+      </div>
+      <div class="contact-detail">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Nashik · Mumbai · Maharashtra
+      </div>
+      <div class="contact-detail">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        GST: 27ABHFR8469G1ZL
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <a href="/" class="footer-logo" aria-label="Return to home">ROYCE<span>TRUSS</span></a>
+  <nav aria-label="Footer navigation">
+    <ul class="footer-nav">
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/expertise.html">Expertise</a></li>
+      <li><a href="/work.html">Work</a></li>
+      <li><a href="/process.html">Process</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="footer-meta">
+    <div class="footer-gst">GST 27ABHFR8469G1ZL · Registered in Maharashtra</div>
+    <div class="footer-copy">© <span id="copy-year"></span> RoyceTruss. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="/static/js/site.js"></script>
+<script src="/static/js/form.js"></script>
+</body>
+</html>
